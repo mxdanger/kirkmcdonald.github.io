@@ -34,28 +34,43 @@ var colorSchemes = [
         "Default",
         "default",
         {
-            "--dark": "#171717",
-            "--dark-overlay": "rgba(23, 23, 23, 0.8)",
-            "--medium": "#212427",
-            "--main": "#272b30",
-            "--light": "#3a3f44",
+            "--main": "#403f40",
+            "--main-foreground": "#313031",
+            "--main-bright": "#8e8e8e",
+            "--main-bright-top": "#aaaaaa",
+            "--main-bright-bottom": "#353535",
+            "--main-dark": "#313031",
+            "--main-top": "#1a1817",
+            "--main-bottom": "#615e5d",
+            "--main-side": "#261F1C",
             "--foreground": "#c8c8c8",
-            "--accent": "#ff7200",
-            "--bright": "#f1fff2"
+            "--dark": "#313031",
+            "--bright": "#dac5a6",
+            "--accent": "#FEAD00",
+            "--depth-shadow": "inset 0 0 8px rgba(0, 0, 0, 1)",
+            "--slot-shadow": "0 0 8px 1px #373331"
         }
     ),
     new ColorScheme(
         "Printer-friendly",
         "printer",
         {
-            "--dark": "#f0f0f0",
             "--dark-overlay": "#ffffff",
-            "--medium": "#ffffff",
             "--main": "#ffffff",
-            "--light": "#dddddd",
+            "--main-foreground": "#000000",
+            "--main-bright": "#ffffff",
+            "--main-bright-top": "#ffffff",
+            "--main-bright-bottom": "#ffffff",
+            "--main-dark": "#f0f0f0",
+            "--main-top": "#f0f0f0",
+            "--main-bottom": "#f0f0f0",
+            "--main-side": "#f0f0f0",
             "--foreground": "#000000",
+            "--dark": "#000000",
+            "--bright": "#111111",
             "--accent": "#222222",
-            "--bright": "#111111"
+            "--depth-shadow": "0 0 rgba(0, 0, 0, 0)",
+            "--slot-shadow": "0 0 rgba(0, 0, 0, 0)"
         }
     )
 ]
