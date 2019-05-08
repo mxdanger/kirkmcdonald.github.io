@@ -57,7 +57,30 @@
 ::-moz-selection {
     background: var(--accent);
 }
-
+/* print styling */
+@media print {
+    .changebox, div.tabs, button.ui, ul.targets li:not(.target):last-child, tr.display-row td.module .dropdownWrapper:first-child {
+        display: none;
+    }
+    ul.targets li.target {
+        border: none;
+    }
+    .dropdownWrapper .dropdown, input, select {
+        box-shadow: none !important;
+        background: none !important;
+    }
+    table#totals {
+        border-spacing: 1;
+    }
+    table#totals, #totals tr td, #totals tr.factory-header th {
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+    }
+    #totals tr td, #totals tr.factory-header th {
+        padding: 5px;
+    }
+}
 /* top-level/shared elements */
 body {
     font-family: sans-serif;
@@ -75,7 +98,10 @@ input, select {
     color: var(--dark);
     background-color: var(--main-bright);
     padding: 0.25em;
-    border: 1px solid var(--main-bright-bottom);
+    border-top: 1px solid var(--slot-top);
+    border-bottom: 1px solid var(--slot-bottom);
+    border-left: 1px solid var(--slot-side);
+    border-right: 1px solid var(--slot-side);
     border-radius: 0.25em;
     box-shadow: 0 1px 4px #595959 inset, var(--slot-shadow);
 }
