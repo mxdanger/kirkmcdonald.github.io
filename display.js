@@ -865,7 +865,8 @@ function RecipeTable(node) {
     totalLabelCell.appendChild(totalLabel)
     this.totalRow.appendChild(totalLabelCell)
     var totalCell = document.createElement("td")
-    totalCell.classList.add("right-align")
+    totalCell.colSpan = 2
+    totalCell.classList.add("left-align")
     this.totalNode = document.createElement("tt")
     totalCell.appendChild(this.totalNode)
     this.totalRow.appendChild(totalCell)
