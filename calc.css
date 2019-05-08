@@ -1,27 +1,68 @@
 :root {
-    /* main background, dropdown backgrounds */
-    --dark: #171717;
-    /* tooltip background; should be same as dark, but with alpha channel */
-    --dark-overlay: rgba(23, 23, 23, 0.8);
-    /* visualization node backgrounds, button backgrounds */
-    --medium: #212427;
-    /* background of main visual area */
-    --main: #272b30;
-    /* input field backgrounds, collapsed dropdown borders */
-    --light: #3a3f44;
+    /* tooltip background; transparent with alpha channel added separately */
+    --dark-overlay: rgba(64, 63, 64, 0.9);
 
-    /* main foreground text color */
+    /* blur effected added to tooltip background */
+    --blur-overlay: blur(3px) saturate(50%);
+
+    /* background of main visual area and elements */
+    --main: #403f40;
+    --main-foreground: #313031;
+    --main-bright: #8e8e8e;
+    --main-bright-top: #aaaaaa;
+    --main-bright-bottom: #353535;
+    --main-dark: #313031;
+    --main-top: #1a1817;
+    --main-bottom: #615e5d;
+    --main-side: #261F1C;
+
+    /* main text colors */
     --foreground: #c8c8c8;
+    --dark: #313031;
+    
+    /* slightly brighter than foreground color */
+    --bright: #dac5a6;
+
     /* makes things stand out */
-    --accent: #ff7200;
-    /* slightly brighter than main foreground color */
-    --bright: #f1fff2;
+    --accent: #FEAD00;
+
+    /* item slot and buttons */
+    --slot-top: #1F1E1F;
+    --slot-bottom: #4D4C4C;
+    --slot-side: #212021;
+    
+    /* table */
+    --table-top: #5a595a;
+    --table-bottom: #1a1a1a;
+    --table-side: #2e2d2e;
+
+    /* shadows */
+    --depth-shadow: inset 0 0 8px rgba(0, 0, 0, 1);
+    --slot-shadow: 0 0 8px 1px #373331;
 }
+@supports (backdrop-filter:blur()) or (-webkit-backdrop-filter:blur()) {
+    :root {
+        --dark-overlay-blur: rgba(23, 23, 23, 0.3);
+    }
+}
+@media screen and (prefers-reduced-transparency: reduce) {
+    :root {
+        --dark-overlay-blur: rgba(23, 23, 23, 1);
+    }
+}
+/* selection styling */
+::selection {
+    background: var(--accent); 
+}
+::-moz-selection {
+    background: var(--accent);
+}
+
 /* top-level/shared elements */
 body {
     font-family: sans-serif;
     color: var(--foreground);
-    background-color: var(--dark);
+    background-color: var(--main-dark);
 }
 a {
     text-decoration: none;
@@ -31,32 +72,42 @@ a:active {
     color: var(--bright);
 }
 input, select {
-    color: var(--foreground);
-    background-color: var(--light);
+    color: var(--dark);
+    background-color: var(--main-bright);
     padding: 0.25em;
-    border: 1px solid var(--light);
-    border-radius: 0.4em;
+    border: 1px solid var(--main-bright-bottom);
+    border-radius: 0.25em;
+    box-shadow: 0 1px 4px #595959 inset, var(--slot-shadow);
 }
 input:focus, select:focus {
     border-color: var(--accent);
     outline: none;
+    box-shadow: 0 1px 8px -3px var(--accent), 0 0 13px -5px var(--accent) inset;
 }
 .right-align {
     text-align: right;
 }
 button.ui {
-    color: var(--accent);
-    background: linear-gradient(to bottom, var(--light), var(--medium));
-    border: 2px outset var(--light);
-    border-radius: 0.4em;
+    color: var(--bright);
+    background: var(--main-dark);
+    border-top: 1px solid var(--slot-top);
+    border-bottom: 1px solid var(--slot-bottom);
+    border-left: 1px solid var(--slot-side);
+    border-right: 1px solid var(--slot-side);
     cursor: pointer;
+    box-shadow: 0 0 4px #262526 inset, var(--slot-shadow);
+}
+button.ui:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), 0 0 4px #262526 inset, 0 0 8px 1px #373331;
 }
 button.ui:active {
-    border-style: inset;
+    border-color: var(--accent);
+    box-shadow: 0 0 10px -4px var(--accent) inset, 0 0 6px -1px var(--accent), 0 0 4px #262526 inset, 0 0 8px 1px #373331;
 }
 button.ui:focus {
     border-color: var(--accent);
     outline: none;
+    box-shadow: 0 0 10px -4px var(--accent) inset, 0 0 6px -1px var(--accent), 0 0 4px #262526 inset, 0 0 8px 1px #373331;
 }
 button#debug_button {
     float: right;
@@ -67,15 +118,22 @@ img.icon {
     height: 32px;
     width: 32px;
     vertical-align: middle;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
 }
 /* "recent changes" box */
 .changecell {
     vertical-align: top;
 }
 .changebox {
-    margin-left: 3em;
-    padding: 1em;
-    border: 2px solid var(--bright);
+    background-color: var(--main);
+    border-radius: 4px;
+    box-shadow: var(--depth-shadow);
+    border-top: 1px solid var(--main-top);
+    border-bottom: 1px solid var(--main-bottom);
+    border-left: 1px solid var(--main-side);
+    border-right: 1px solid var(--main-side);
+    margin: 0 0 0.4em 1em;
+    padding: 1em 1.2em;
     font-family: monospace;
 }
 /* tooltips */
@@ -84,25 +142,57 @@ div.tooltip {
     z-index: 20;
 }
 div.tooltip .frame {
-    border: 2px solid var(--bright);
-    border-radius: 5px;
+    border-top: 1px solid var(--main-top);
+    border-bottom: 1px solid var(--main-top);
+    border-left: 1px solid var(--main-side);
+    border-right: 1px solid var(--main-side);
     background-color: var(--dark-overlay);
-    padding: 0.4em;
+    padding: 0 0.4em;
     text-align: left;
     opacity: 1;
     z-index: 20;
+    -webkit-backdrop-filter: var(--blur-overlay);
+    backdrop-filter: var(--blur-overlay);
+    line-height: 1.5em;
+}
+@supports (backdrop-filter:blur()) or (-webkit-backdrop-filter:blur()) {
+    div.tooltip .frame {
+        background-color: var(--dark-overlay-blur);
+    }
 }
 div.tooltip h3 {
+    background-color: rgba(227, 205, 172, 0.8);
     margin: 0;
+    border-bottom: 1px solid #040505;
+    box-shadow: 0 0 5px 2px rgba(130, 108, 69, 0.6) inset;
+    color: var(--dark);
+    font-size: 1em;
+    margin-left: -0.4em;
+    width: calc(100% + 0.8em);
+    padding-top: 0.2em;
 }
-div.tooltip h3:not(:last-child) {
-    margin-bottom: 0.5em;
+div.tooltip h3 img.icon {
+    margin-top: -0.2em;
+    transform: scale(0.7);
+}
+div.tooltip h3 + div.product {
+    margin-top: 0.4em;
 }
 div.tooltip div.product {
+    border-top: 1px solid var(--slot-top);
+    border-bottom: 1px solid var(--slot-bottom);
+    border-left: 1px solid var(--slot-side);
+    border-right: 1px solid var(--slot-side);
+    background-color: var(--main-dark);
+    box-shadow: 0 0 4px #262526 inset, 0 0 8px 1px #373331;
     position: relative;
     display: inline-block;
-    background-color: var(--light);
-    margin-top: 5px;
+    height: 2.2em;
+    width: 2.2em;
+    margin: 0 0.2em 0.4em 0;
+}
+div.tooltip div.product img {
+    margin: 0.1em 0 0 0.1em;
 }
 div.tooltip div.product span.count {
     position: absolute;
@@ -111,10 +201,15 @@ div.tooltip div.product span.count {
     font-size: 12px;
     font-family: monospace;
     color: var(--bright);
-    text-shadow: -1px -1px 0px var(--dark), -1px 1px 0px var(--dark), 1px -1px 0px var(--dark), 1px 1px 0px var(--dark);
+    text-shadow: -1px -1px 0px var(--main-dark), -1px 1px 0px var(--main-dark), 1px -1px 0px var(--main-dark), 1px 1px 0px var(--main-dark);
 }
 div.tooltip img.ingredient {
-    background-color: var(--light);
+    border-top: 1px solid var(--slot-top);
+    border-bottom: 1px solid var(--slot-bottom);
+    border-left: 1px solid var(--slot-side);
+    border-right: 1px solid var(--slot-side);
+    background-color: var(--main-dark);
+    box-shadow: 0 0 4px #262526 inset, 0 0 8px 1px #373331;
 }
 /* build targets */
 .targetButton {
@@ -124,15 +219,32 @@ div.tooltip img.ingredient {
     text-align: center;
     font-weight: bold;
     font-family: sans-serif;
-    margin-right: 0.5em;
 }
 ul.targets {
+    background-color: var(--main);
+    border-radius: 4px;
+    box-shadow: var(--depth-shadow);
+    border-top: 1px solid var(--main-top);
+    border-bottom: 1px solid var(--main-bottom);
+    border-left: 1px solid var(--main-side);
+    border-right: 1px solid var(--main-side);
+    padding: 0.1em 0.5em;
     list-style-type: none;
-    margin-top: 0;
+    margin: 0 0 0.4em 0;
+}
+ul.targets li:first-child {
+    border-top: none;
+}
+ul.targets li:last-child {
+    border-bottom: none;
 }
 ul.targets li {
-    margin: 0.25em;
-    border-radius: 0.5em;
+    padding: 0.7em 0.5em;
+    border-top: 1px solid var(--table-top);
+    border-bottom: 1px solid var(--table-bottom);
+}
+ul.targets li .dropdownWrapper {
+    margin-left: 1em;
 }
 ul.targets a {
     font-size: large;
@@ -140,6 +252,7 @@ ul.targets a {
     cursor: pointer;
 }
 label.selected {
+    margin-left: 0.5em;
     font-weight: bold;
     color: var(--bright);
 }
@@ -163,9 +276,23 @@ input.mprod {
 /* factories tab */
 input.beacon {
     width: 4em;
+    margin: 0 5px;
 }
 #totals {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 1px solid var(--table-bottom);
+    border-bottom: 1px solid var(--table-top);
+    border-left: 1px solid var(--table-side);
+    border-right: 1px solid var(--table-side);
+    margin: 0 auto 1em auto;
+    background-color: var(--table-side);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+#totals tr td {
+    background-color: var(--main);
+    line-height: 100%;
 }
 tr.display-row td.pad, th.pad {
     padding-left: 1em;
@@ -187,12 +314,53 @@ tr.display-row .dropdown + .spacer {
 tr.display-row td, tr.factory-header th {
     padding-top: 8px;
     padding-bottom: 8px;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-weight: bold;
+    text-transform: capitalize;
 }
-tr.recipe-row td, tr.group-bottom-row td, tr.factory-header th {
-    border-bottom: 1px solid var(--light);
+tr.display-row td:first-child:not(.waste-hide), tr.factory-header th:first-child, tr.display-row:last-child td.waste-hide + td {
+    border-left: 1px solid var(--table-side);
+    border-radius: 3px 0 0 3px;
+    padding-left: 1em;
+}
+tr.display-row td:last-child, tr.factory-header th:last-child {
+    border-right: 1px solid var(--table-side);
+    border-radius: 0 3px 3px 0;
+    padding-right: 1em;
+}
+tr.group-row.group-top-row td:first-child {
+    border-bottom-left-radius: 0;
+}
+tr.group-row.group-top-row td:last-child {
+    border-bottom-right-radius: 0;
+}
+tr.group-row.group-bottom-row td:first-child {
+    border-top-left-radius: 0;
+}
+tr.group-row.group-bottom-row td:last-child {
+    border-top-right-radius: 0;
+}
+tr.group-row:not(.group-top-row):not(.group-bottom-row) td:first-child, tr.group-row:not(.group-top-row):not(.group-bottom-row) td:last-child {
+    border-radius: 0;
+}
+tr.display-row:not(.group-row) td, tr.factory-header th {
+    border-top: 1px solid var(--table-top);
+    border-bottom: 1px solid var(--table-bottom);
+}
+tr.group-top-row td {
+    border-top: 1px solid var(--table-top);
+}
+tr.group-bottom-row td {
+    border-bottom: 1px solid var(--table-bottom);
 }
 tr.group-row td.leftmost {
-    border-left: 1px solid var(--light);
+    border-left: 1px solid var(--table-side);
+    box-shadow: 2px 0 0 -1px var(--table-top) inset;
+}
+tr.factory-header th {
+    border-top-color: var(--main-bright-top);
+    background-color: var(--main-bright);
+    color: var(--dark);
 }
 tr.ignore img.display {
     opacity: 0.2;
@@ -207,8 +375,9 @@ span.displaylink {
     font-size: x-small;
 }
 tr.display-row button.copy {
-    padding: 0px;
-    height: 32px;
+    padding: 0 2px;
+    height: 38px;
+    margin: 0 5px;
 }
 /* items tab */
 input.pipe {
@@ -222,36 +391,62 @@ svg.popout {
     width: 16;
     height: 16;
 }
+svg.popout:active {
+    filter: drop-shadow(0 0px 3px var(--accent));
+}
 /* tabs */
 div.tabs {
     overflow: hidden;
 }
 
 div.tabs button.tab_button {
-    color: var(--accent);
-    background-color: inherit;
-    border-top-left-radius: 0.25em;
-    border-top-right-radius: 0.25em;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 0.75em;
+    color: var(--dark);
+    background-color: var(--main-bright);
+    border-radius: 0.25em 0.25em 0 0;
     float: left;
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 0.5em;
+    padding: 0.75em 1em;
+    border-top: 1px solid var(--main-bright-top);
+    box-shadow: 0 -1px 1px 0 var(--main-bright-bottom) inset, 0 -1px 2px 1px #595959 inset, 0 -1px 3px -1px #3C3C3C inset;
+    margin: 0 0 0.5em 0;
+}
+div.tabs button.tab_button:first-child {
+    margin-left: 0.3em;
+}
+div.tabs button.tab_button:last-child {
+    margin-right: 0.3em;
 }
 
 div.tabs button.tab_button:hover {
-    background-color: var(--medium)
+    opacity: 0.85;
 }
-
+div.tabs button.tab_button:active {
+    opacity: 0.75;
+}
 div.tabs button.active, div.tabs button.active:hover {
     color: var(--bright);
-    background-color: var(--main);
+    background-color: var(--main-dark);
+    box-shadow: none;
+    border-top: 1px solid rgba(0, 0, 0, 0);
 }
 
 div.tab {
     display: none;
     padding: 1em;
     background-color: var(--main);
+    border-radius: 4px;
+    box-shadow: var(--depth-shadow);
+    border-top: 1px solid var(--main-top);
+    border-bottom: 1px solid var(--main-bottom);
+    border-left: 1px solid var(--main-side);
+    border-right: 1px solid var(--main-side);
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 /* visualizer settings */
 #graph-wrapper {
@@ -280,9 +475,15 @@ div.tab {
 }
 #graph-wrapper .graph-setting-box {
     display: none;
-    padding: 0.5em;
-    border: 2px solid var(--accent);
+    padding: 1em 0.75em;
+    background: var(--main-dark);
+    border-top: 1px solid var(--main-top);
+    border-bottom: 1px solid var(--main-bottom);
+    border-left: 1px solid var(--main-side);
+    border-right: 1px solid var(--main-side);
     border-radius: 5px;
+    box-shadow: var(--depth-shadow);
+    margin-right: 0.5em;
 }
 #graph-wrapper.open .graph-setting-box {
     grid-row: 1 / 3;
@@ -348,6 +549,13 @@ div.graph {
     width: 100%;
     padding-left: 0.4em;
     margin-bottom: 0.4em;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+    height: 2.4em;
+    color: #aaa;
+}
+.dropdownWrapper .dropdown .search, .dropdownWrapper .dropdown .search:focus {
+    border-color: var(--main-top);
 }
 .dropdownWrapper.open .dropdown .search {
     display: block;
@@ -356,6 +564,7 @@ div.graph {
     height: 400px;
     width: 380px;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     transition: height 0.3s;
 }
 /* debug */
